@@ -1,0 +1,99 @@
+<html ng-app="fundingApp">
+<head>
+    <title>welcome to Funding example</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/css/ngTable.css"/>
+    <style>
+        body {
+            padding-top: 70px;
+        }
+    </style>
+    <script src="/js/angular.js"></script>
+    <script src="/js/ngTable.js"></script>
+    <script src="/js/fund.js"></script>
+</head>
+<body ng-controller="fundController">
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">RL</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">Home</a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div>
+</nav>
+<div class="container">
+    <div class="title ">
+        <h2>RL example: Funding</h2>
+    </div>
+    <h3 ng-show="isLoading">loading.......</h3>
+    <div class="content">
+        <div class="table-content col-md-8">
+            <div class="fund-table" ng-hide="!displayFundsTable">
+                <table ng-table="fundsTable" class="table" show-filter="true">
+                    <tr ng-repeat="fund in $data" ng-click="clickFund(fund.code)">
+                        <td title="'基金代码'" filter="{ code: 'text'}" sortable="'code'">
+                            {{fund.code}}</td>
+                        <td title="'基金名称'" filter="{ name: 'text'}" sortable="'name'">
+                            {{fund.name}}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="table-content col-md-8" ng-hide="displayFundsTable">
+                <table ng-table="historyTable" class="table" show-filter="true">
+                    <tr ng-repeat="fundHistory in $data">
+                        <td title="'基金代码'" filter="{ code: 'text'}" sortable="'fundCode'">
+                            {{fundHistory.fundCode}}</td>
+                        <td title="'单位净值'" filter="{ code: 'text'}" sortable="'netAssetValue'">
+                            {{fundHistory.netAssetValue}}</td>
+                        <td title="'累计净值'" filter="{ code: 'text'}" sortable="'netValue'">
+                            {{fundHistory.netValue}}</td>
+                        <td title="'日增长率'" filter="{ code: 'text'}" sortable="'rate'">
+                            {{fundHistory.rate}}</td>
+                        <td title="'日期'" filter="{ code: 'text'}" sortable="'date'">
+                            {{fundHistory.date|date:'yyyy-MM-dd'}}</td>
+                    </tr>
+                </table>
+                <button class="btn btn-primary" ng-click="displayFundsTable=true">back</button>
+            </div>
+        </div>
+        <div class="form col-md-4">
+            <h3>condition:</h3>
+            <form role="form">
+                <div class="form-group">
+                    <label for="fundCode">基金代码:</label>
+                    <input type="text" class="form-control" id="fundCode" placeholder="基金代码" ng-model="learningOptions.currentFundCode"></input>
+                </div>
+                <div class="form-group">
+                    <label for="money">初始金额:</label>
+                    <input type="number" class="form-control" id="money" placeholder="初始金额" value="10000" ng-model="learningOptions.money"></input>
+                </div>
+                <div class="form-group">
+                    <label for="fee">操作手续费(x%):</label>
+                    <input type="number" class="form-control" id="fee" placeholder="手续费" value="0.1" step="0.01"></input>
+                </div>
+                <div class="form-group">
+                    <label for="trainTimes">train times:</label>
+                    <input type="number" class="form-control" id="trainTimes" placeholder="trainTimes" value="100" step="10000"></input>
+                </div>
+                <div class="form-group">
+                    <label for="learningRate">learning Rate:</label>
+                    <input type="number" class="form-control" id="learningRate" placeholder="learning rate" value="0.1" step="0.01"></input>
+                </div>
+            </form>
+            <button class="btn btn-default" ng-click="process()">显示过去一年用RL操作这个基金的收益</button>
+        </div>
+        <div class="col-md-12" ng-show="displayResult">假如用rl买这个基金，一年后你会拥有: {{result}}</div>
+    </div>
+</div>
+</body>
+</html>
